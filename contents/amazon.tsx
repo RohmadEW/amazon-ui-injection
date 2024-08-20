@@ -23,12 +23,18 @@ export const getShadowHostId = () => "amazon-plasmo-id"
 
 const PlasmoAmazon = () => {
   const [asin, setAsin] = useState<string>("")
+  const [reviewCount, setReviewCount] = useState<number>(0)
 
   useEffect(() => {
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (request.action === RuntimeMessageAction.GET_ASIN) {
         setAsin(request.data.asin)
         sendResponse("Asin has been set")
+      }
+
+      if (request.action === RuntimeMessageAction.GET_REVIEW_COUNT) {
+        setReviewCount(request.data.count)
+        sendResponse("Review count has been set")
       }
     })
   }, [])
@@ -51,7 +57,7 @@ const PlasmoAmazon = () => {
           </div>
         </div>
         <div className="p-4 w-6/12">
-          <div className="font-bold mb-2">Reviews 27,750</div>
+          <div className="font-bold mb-2">Reviews {reviewCount}</div>
           <div className="flex flex-wrap item-centers gap-4">
             <button className="px-3 py-1 bg-white border border-gray-300 rounded-md">
               Review Analysis
