@@ -69,11 +69,11 @@ export const ScrapeReviewsMain = ({ asin }: ScrapeReviewsMainProps) => {
           setMsgFromServer(data.message)
         }
 
-        if (!res.ok) {
-          throw new Error("Failed to send reviews to server")
-        }
+        // if (!res.ok) {
+        //   throw new Error("Failed to send reviews to server")
+        // }
       } catch (err) {
-        setError(err.message)
+        // setError(err.message)
       }
     }
 
