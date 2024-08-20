@@ -1,10 +1,14 @@
-This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with [`plasmo init`](https://www.npmjs.com/package/plasmo).
-
-## Getting Started
-
-First, run the development server:
+# Run Local
 
 ```bash
+# Install
 pnpm install
+# Run dev server
 pnpm dev
+# Build
+pnpm build
+# Create zip file
+pnpm package
 ```
+
+The extension can be found in the build folder.
