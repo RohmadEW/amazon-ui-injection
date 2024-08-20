@@ -1,8 +1,8 @@
 import cssText from "data-text:~/contents/tailwind.css"
 import type { PlasmoCSConfig, PlasmoGetInlineAnchor } from "plasmo"
-import { useEffect, useState } from "react"
 
-import { RuntimeMessageAction } from "~types/runtime_types"
+import { Asin } from "./components/asin"
+import { ReviewCount } from "./components/review_count"
 
 export const config: PlasmoCSConfig = {
   matches: ["https://www.amazon.com/*"]
@@ -22,23 +22,6 @@ export const getInlineAnchor: PlasmoGetInlineAnchor = async () => ({
 export const getShadowHostId = () => "amazon-plasmo-id"
 
 const PlasmoAmazon = () => {
-  const [asin, setAsin] = useState<string>("")
-  const [reviewCount, setReviewCount] = useState<number>(0)
-
-  useEffect(() => {
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-      if (request.action === RuntimeMessageAction.GET_ASIN) {
-        setAsin(request.data.asin)
-        sendResponse("Asin has been set")
-      }
-
-      if (request.action === RuntimeMessageAction.GET_REVIEW_COUNT) {
-        setReviewCount(request.data.count)
-        sendResponse("Review count has been set")
-      }
-    })
-  }, [])
-
   return (
     <span className="w-full bg-gray-100 border border-gray-300 rounded-md mt-4">
       <div className="flex item-centers">
@@ -50,14 +33,14 @@ const PlasmoAmazon = () => {
           </div>
         </div>
         <div className="p-4 border-r w-4/12">
-          <div className="font-bold mb-2">{asin}</div>
+          <Asin />
           <div>#2 In Cell Phone & Accessories</div>
           <div>
             #1 in <span className="text-blue-500">Cell Phone Basic Cases</span>
           </div>
         </div>
         <div className="p-4 w-6/12">
-          <div className="font-bold mb-2">Reviews {reviewCount}</div>
+          <ReviewCount />
           <div className="flex flex-wrap item-centers gap-4">
             <button className="px-3 py-1 bg-white border border-gray-300 rounded-md">
               Review Analysis
