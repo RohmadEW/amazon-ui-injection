@@ -24,6 +24,7 @@ export const getInlineAnchor: PlasmoGetInlineAnchor = async () => ({
 export const getShadowHostId = () => "amazon-plasmo-id"
 
 const PlasmoAmazon = () => {
+  const [asin, setAsin] = useState("")
   const [showReviewAnalysis, setShowReviewAnalysis] = useState(true)
 
   return (
@@ -40,7 +41,7 @@ const PlasmoAmazon = () => {
             </div>
           </div>
           <div className="p-4 w-4/12">
-            <Asin />
+            <Asin asin={asin} onChange={setAsin} />
             <div>#2 In Cell Phone & Accessories</div>
             <div>
               #1 in{" "}
@@ -80,7 +81,7 @@ const PlasmoAmazon = () => {
           </div>
         </div>
       </div>
-      {showReviewAnalysis && <ReviewAnalysisMain />}
+      {showReviewAnalysis && <ReviewAnalysisMain asin={asin} />}
     </div>
   )
 }

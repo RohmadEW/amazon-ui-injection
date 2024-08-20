@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react"
 
-export const Asin = () => {
-  const [asin, setAsin] = useState<string>("")
+interface AsinProps {
+  asin: string
+  onChange: (asin: string) => void
+}
 
+export const Asin = ({ asin, onChange }: AsinProps) => {
   useEffect(() => {
     const asin = document.getElementById("asin") as HTMLInputElement
-    setAsin(asin.value)
+    onChange(asin.value)
   }, [])
 
-  return <div className="font-bold mb-2">Review {asin}</div>
+  return <div className="font-bold mb-2">{asin}</div>
 }
