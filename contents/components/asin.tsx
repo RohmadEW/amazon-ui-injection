@@ -8,5 +8,5 @@ export const Asin = () => {
     setAsin(asin.value)
   }, [])
 
-  return <div className="font-bold mb-2">{asin}</div>
+  return <div className="font-bold mb-2">Review {asin}</div>
 }

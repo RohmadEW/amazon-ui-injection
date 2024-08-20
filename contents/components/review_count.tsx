@@ -10,5 +10,5 @@ export const ReviewCount = () => {
     setReviewCount(reviewCountText.innerText.split(" ")[0].replace(",", ""))
   }, [])
 
-  return <div className="font-bold mb-2">{reviewCount}</div>
+  return <div className="font-bold mb-2">Reviews {reviewCount}</div>
 }
