@@ -10,6 +10,7 @@ export const ScrapeReviewsMain = ({ asin }: ScrapeReviewsMainProps) => {
   const [reviewsCount, setReviewsCount] = useState(0)
   const [page, setPage] = useState(1)
   const [error, setError] = useState(null)
+  const [msgFromServer, setMsgFromServer] = useState(null)
 
   useEffect(() => {
     const fetchReviewsCount = async () => {
@@ -47,6 +48,35 @@ export const ScrapeReviewsMain = ({ asin }: ScrapeReviewsMainProps) => {
   }, [asin])
 
   useEffect(() => {
+    const sendReviewToServer = async (reviewData) => {
+      try {
+        const res = await fetch(
+          "http://127.0.0.1:8000/scraping/insert_reviews",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              asin: asin,
+              reviews: reviewData
+            })
+          }
+        )
+
+        if (res.ok) {
+          const data = await res.json()
+          setMsgFromServer(data.message)
+        }
+
+        if (!res.ok) {
+          throw new Error("Failed to send reviews to server")
+        }
+      } catch (err) {
+        setError(err.message)
+      }
+    }
+
     const fetchReviews = async () => {
       try {
         setLoading(true)
@@ -96,6 +126,7 @@ export const ScrapeReviewsMain = ({ asin }: ScrapeReviewsMainProps) => {
           })
 
           setTotalReviews((prevReviews) => [...prevReviews, ...reviewData])
+          sendReviewToServer(reviewData)
         }
 
         setLoading(false)
@@ -122,6 +153,9 @@ export const ScrapeReviewsMain = ({ asin }: ScrapeReviewsMainProps) => {
           Total Reviews: {totalReviews.length} ({reviewsCount})
         </h1>
       </div>
+      {msgFromServer && (
+        <div className="alert alert-success">{msgFromServer}</div>
+      )}
       <div className="h-[500px] overflow-y-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {totalReviews.map((review, index) => (
