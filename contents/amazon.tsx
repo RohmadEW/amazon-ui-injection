@@ -1,4 +1,4 @@
-import cssText from "data-text:~/contents/tailwind.css"
+import cssText from "data-text:~style.css"
 import type { PlasmoCSConfig, PlasmoGetInlineAnchor } from "plasmo"
 import { useState } from "react"
 
