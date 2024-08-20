@@ -1,5 +1,6 @@
 import { ReviewAnalysisCustomerProfile } from "./customer_profile"
 import { ReviewAnalysisPros } from "./pros"
+import { ReviewAnalysisUsageScenario } from "./useage_scenario"
 
 export const ReviewAnalysisMain = () => {
   return (
@@ -10,6 +11,7 @@ export const ReviewAnalysisMain = () => {
       <div className="grid grid-cols-2 gap-4 mt-2">
         <ReviewAnalysisCustomerProfile />
         <ReviewAnalysisPros />
+        <ReviewAnalysisUsageScenario />
       </div>
     </div>
   )
