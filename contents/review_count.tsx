@@ -1,6 +1,5 @@
 import type { PlasmoCSConfig } from "plasmo"
 
-import type { AsinRuntimeMessage } from "~types/asin"
 import type { ReviewCountRuntimeMessage } from "~types/review_count"
 import { RuntimeMessageAction, RuntimeType } from "~types/runtime_types"
 
