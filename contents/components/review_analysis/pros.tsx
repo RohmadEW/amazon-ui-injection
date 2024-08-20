@@ -4,7 +4,7 @@ export const ReviewAnalysisPros = () => {
   return (
     <div className="border rounded-md">
       <div className="px-4 py-2 font-bold border-b flex items-center">
-        <AiOutlineLike className="mr-2" color="orange" />
+        <AiOutlineLike className="mr-2" color="green" />
         Pros
       </div>
       <table className="table w-full">
@@ -18,19 +18,17 @@ export const ReviewAnalysisPros = () => {
         <tbody className="text-xs">
           {dataDummy.map((data, index) => (
             <tr key={index}>
-              <td className="w-1/4">{data.topic}</td>
-              <td className="w-1/4">
+              <td className="w-1/5">{data.topic}</td>
+              <td className="w-1/5">
                 <div className="flex items-center gap-2">
-                  <div className="w-4">{data.percentage}%</div>
+                  <div className="w-6 text-right">{data.percentage}%</div>
                   <progress
                     className="progress progress-success w-20"
                     value={data.percentage}
                     max="100"></progress>
                 </div>
               </td>
-              <td className="w-2/4">
-                <div className="truncate">{data.reason}</div>
-              </td>
+              <td className="w-3/5">{data.reason}</td>
             </tr>
           ))}
         </tbody>
@@ -43,7 +41,7 @@ const dataDummy = [
   {
     topic: "Protection",
     percentage: 15,
-    reason: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    reason: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
   },
   {
     topic: "Durability",
