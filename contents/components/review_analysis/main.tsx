@@ -1,3 +1,4 @@
+import { ReviewAnalysisCons } from "./cons"
 import { ReviewAnalysisCustomerProfile } from "./customer_profile"
 import { ReviewAnalysisPros } from "./pros"
 import { ReviewAnalysisUsageScenario } from "./useage_scenario"
@@ -12,6 +13,7 @@ export const ReviewAnalysisMain = () => {
         <ReviewAnalysisCustomerProfile />
         <ReviewAnalysisPros />
         <ReviewAnalysisUsageScenario />
+        <ReviewAnalysisCons />
       </div>
     </div>
   )

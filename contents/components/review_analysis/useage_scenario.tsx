@@ -1,10 +1,10 @@
-import { AiOutlineLike } from "react-icons/ai"
+import { ImLocation2 } from "react-icons/im"
 
 export const ReviewAnalysisUsageScenario = () => {
   return (
     <div className="border rounded-md">
       <div className="px-4 py-2 font-bold border-b flex items-center">
-        <AiOutlineLike className="mr-2" color="blue" />
+        <ImLocation2 className="mr-2" color="blue" />
         Usage Scenario
       </div>
       <table className="table w-full">
