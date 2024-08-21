@@ -112,7 +112,7 @@ export const ScrapeReviewsMain = () => {
             if (title) {
               const titleSpan = title.innerText.trim().split("out of 5 stars")
               if (titleSpan.length > 1) {
-                currentProductReview.title = titleSpan[1]
+                currentProductReview.title = titleSpan[1].trim()
               }
             }
 

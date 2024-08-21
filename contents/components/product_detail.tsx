@@ -122,16 +122,22 @@ export const ProductDetailMain = () => {
       one: "a[href*='filterByStar=one_star']"
     }
 
-    Object.keys(starRatings).forEach((key) => {
+    Object.keys(starRatings).forEach((key, index) => {
       const starElement = document.querySelector(
         starRatings[key]
       ) as HTMLAnchorElement
 
       if (starElement) {
-        const percentageText = starElement.textContent?.match(/(\d+)%/)?.[1]
-
-        if (percentageText) {
-          productStars[key as keyof ProductStar] = parseInt(percentageText, 10)
+        const extractContent = starElement.textContent.split(" star")
+        if (extractContent.length > 1) {
+          const percentageExtract =
+            extractContent[extractContent.length - 1].split("%")
+          try {
+            const percentage = percentageExtract[index]
+            productStars[key as keyof ProductStar] = parseInt(percentage)
+          } catch (error) {
+            console.error(error)
+          }
         }
       }
     })
