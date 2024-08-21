@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react"
 
+import type { Product } from "~types/products"
+
 interface ScrapeReviewsMainProps {
-  asin: string
+  product: Product
 }
 
-export const ScrapeReviewsMain = ({ asin }: ScrapeReviewsMainProps) => {
+export const ScrapeReviewsMain = ({ product }: ScrapeReviewsMainProps) => {
+  const asin = product.asin
   const [totalReviews, setTotalReviews] = useState([])
   const [loading, setLoading] = useState(false)
   const [reviewsCount, setReviewsCount] = useState(0)

@@ -24,7 +24,6 @@ export const ReviewAnalysisMain = ({ asin }: ReviewAnalysisMainProps) => {
         <ReviewAnalysisCustomerExpectation />
         <ReviewAnalysisPurchaseMotivations />
       </div>
-      <ScrapeReviewsMain asin={asin} />
     </div>
   )
 }

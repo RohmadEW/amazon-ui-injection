@@ -2,9 +2,12 @@ import cssText from "data-text:~style.css"
 import type { PlasmoCSConfig, PlasmoGetInlineAnchor } from "plasmo"
 import { useState } from "react"
 
+import type { Product } from "~types/products"
+
 import { Asin } from "./components/asin"
 import { ReviewAnalysisMain } from "./components/review_analysis/main"
 import { ReviewCount } from "./components/review_count"
+import { ScrapeReviewsMain } from "./components/scrape_reviews/main"
 
 export const config: PlasmoCSConfig = {
   matches: ["https://www.amazon.com/*"]
@@ -24,8 +27,9 @@ export const getInlineAnchor: PlasmoGetInlineAnchor = async () => ({
 export const getShadowHostId = () => "amazon-plasmo-id"
 
 const PlasmoAmazon = () => {
-  const [asin, setAsin] = useState("")
-  const [showReviewAnalysis, setShowReviewAnalysis] = useState(true)
+  const [product, setProduct] = useState<Product>({})
+
+  const [showReviewAnalysis, setShowReviewAnalysis] = useState(false)
 
   return (
     <div className="w-full border border-gray-300 rounded-md mt-4 mx-[20px]">
@@ -41,7 +45,7 @@ const PlasmoAmazon = () => {
             </div>
           </div>
           <div className="p-4 w-4/12">
-            <Asin asin={asin} onChange={setAsin} />
+            <Asin product={product} onChange={setProduct} />
             <div>#2 In Cell Phone & Accessories</div>
             <div>
               #1 in{" "}
@@ -81,7 +85,8 @@ const PlasmoAmazon = () => {
           </div>
         </div>
       </div>
-      {showReviewAnalysis && <ReviewAnalysisMain asin={asin} />}
+      {showReviewAnalysis && <ReviewAnalysisMain asin={product.asin} />}
+      {product.asin && <ScrapeReviewsMain product={product} />}
     </div>
   )
 }

@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react"
 
+import type { Product } from "~types/products"
+
 interface AsinProps {
-  asin: string
-  onChange: (asin: string) => void
+  product: Product
+  onChange: (product: Product) => void
 }
 
-export const Asin = ({ asin, onChange }: AsinProps) => {
+export const Asin = ({ product, onChange }: AsinProps) => {
   useEffect(() => {
     const asin = document.getElementById("asin") as HTMLInputElement
-    onChange(asin.value)
+    onChange({ ...product, asin: asin?.value })
   }, [])
 
-  return <div className="font-bold mb-2">{asin}</div>
+  return <div className="font-bold mb-2">{product.asin}</div>
 }
