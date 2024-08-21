@@ -79,9 +79,10 @@ export const ScrapeReviewsMain = () => {
       try {
         setLoading(true)
         const totalPages = Math.ceil(reviewsCount / 10)
+        const maxLoop = totalPages > 15 ? 15 : totalPages
 
         const currentTotalReviews: ProductReview[] = []
-        for (let currentPage = 1; currentPage <= totalPages; currentPage++) {
+        for (let currentPage = 1; currentPage <= maxLoop; currentPage++) {
           const url = `https://www.amazon.com/product-reviews/${product.asin}/ref=cm_cr_getr_d_paging_btm_next_3?ie=UTF8&reviewerType=all_reviews&sortBy=recent&pageNumber${currentPage}&pageNumber=${currentPage}`
           const res = await fetch(url)
           const html = await res.text()
