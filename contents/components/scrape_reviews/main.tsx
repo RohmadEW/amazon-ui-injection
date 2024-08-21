@@ -80,6 +80,7 @@ export const ScrapeReviewsMain = () => {
         setLoading(true)
         const totalPages = Math.ceil(reviewsCount / 10)
 
+        const currentTotalReviews: ProductReview[] = []
         for (let currentPage = 1; currentPage <= totalPages; currentPage++) {
           const url = `https://www.amazon.com/product-reviews/${product.asin}/ref=cm_cr_getr_d_paging_btm_next_3?ie=UTF8&reviewerType=all_reviews&sortBy=recent&pageNumber${currentPage}&pageNumber=${currentPage}`
           const res = await fetch(url)
@@ -158,13 +159,14 @@ export const ScrapeReviewsMain = () => {
             return currentProductReview
           })
 
-          setTotalReviews((prevReviews) => [...prevReviews, ...reviewData])
+          currentTotalReviews.push(...reviewData)
+          setTotalReviews(currentTotalReviews)
         }
 
         setProduct((prevProduct) => ({
           ...prevProduct,
           scraped_finished: true,
-          reviews: totalReviews
+          reviews: currentTotalReviews
         }))
 
         setLoading(false)
