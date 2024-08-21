@@ -54,6 +54,29 @@ export const ProductDetailMain = () => {
         ...prevProduct,
         description: element.textContent?.trim() || ""
       }))
+    } else {
+      const xpathResult = document.evaluate(
+        "//h2[text()='Product Description']/following-sibling::div[1]/*[not(self::style or self::script)]",
+        document,
+        null,
+        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+        null
+      )
+
+      const nodes = []
+      for (let i = 0; i < xpathResult.snapshotLength; i++) {
+        nodes.push(xpathResult.snapshotItem(i))
+      }
+
+      const description = nodes
+        .map((node) => node.textContent?.trim())
+        .filter((text) => text)
+        .join(" ")
+
+      setProduct((prevProduct) => ({
+        ...prevProduct,
+        description: description
+      }))
     }
   }
 
