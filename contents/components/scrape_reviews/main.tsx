@@ -79,10 +79,9 @@ export const ScrapeReviewsMain = () => {
       try {
         setLoading(true)
         const totalPages = Math.ceil(reviewsCount / 10)
-        const maxLoop = totalPages > 15 ? 15 : totalPages
 
         const currentTotalReviews: ProductReview[] = []
-        for (let currentPage = 1; currentPage <= maxLoop; currentPage++) {
+        for (let currentPage = 1; currentPage <= totalPages; currentPage++) {
           const url = `https://www.amazon.com/product-reviews/${product.asin}/ref=cm_cr_getr_d_paging_btm_next_3?ie=UTF8&reviewerType=all_reviews&sortBy=recent&pageNumber${currentPage}&pageNumber=${currentPage}`
           const res = await fetch(url)
           const html = await res.text()
@@ -162,6 +161,10 @@ export const ScrapeReviewsMain = () => {
 
           currentTotalReviews.push(...reviewData)
           setTotalReviews(currentTotalReviews)
+
+          if (currentTotalReviews.length >= 100) {
+            break
+          }
         }
 
         setProduct((prevProduct) => ({
@@ -211,20 +214,20 @@ export const ScrapeReviewsMain = () => {
                 <div className="flex items-center gap-4 mb-4">
                   <h2 className="text-lg font-bold">{review.title}</h2>
                 </div>
-                <span className="text-sm text-gray-500">
-                  {review.reviewed_at}
-                </span>
-                <div className="flex items-center gap-4 mb-4">
+                <div className="flex items-center gap-4">
+                  <span className="text-sm text-gray-500 mr-auto">
+                    {review.reviewed_at}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    Rating: {review.rating}
+                  </span>
+                </div>
+                <div className="flex items-center gap-4">
                   <span className="text-sm text-gray-500 mr-auto">
                     {review.customer_name}
                   </span>
                   <span className="text-sm text-gray-500">
                     {review.verified ? "Verified" : "Not Verified"}
-                  </span>
-                </div>
-                <div className="mb-4">
-                  <span className="text-sm text-gray-500">
-                    Rating: {review.rating}
                   </span>
                 </div>
                 <div className="mb-4">

@@ -1,14 +1,12 @@
 import cssText from "data-text:~style.css"
-import { useAtom, useAtomValue } from "jotai"
+import { useAtomValue } from "jotai"
 import type { PlasmoCSConfig, PlasmoGetInlineAnchor } from "plasmo"
 import { useState } from "react"
 
 import { productAtom } from "~store/products"
-import type { Product } from "~types/products"
 
 import { ProductDetailMain } from "./components/product_detail"
 import { ReviewAnalysisMain } from "./components/review_analysis/main"
-import { ReviewCount } from "./components/review_count"
 import { ScrapeReviewsMain } from "./components/scrape_reviews/main"
 
 export const config: PlasmoCSConfig = {
@@ -55,7 +53,7 @@ const PlasmoAmazon = () => {
             </div>
           </div>
           <div className="p-4 w-6/12">
-            <ReviewCount />
+            <div className="font-bold mb-2">Reviews {product.review_count}</div>
             <div className="flex flex-wrap item-centers gap-4">
               <button
                 className={`btn btn-sm font-normal ${showReviewAnalysis ? "btn-primary" : "bg-white border border-gray-300"}`}

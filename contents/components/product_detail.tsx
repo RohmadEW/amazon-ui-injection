@@ -193,7 +193,7 @@ export const ProductDetailMain = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
+      <h1 className="text-xl font-bold mb-2">{product.name}</h1>
       <div className="mb-4">
         <img
           src={product.image_url}
