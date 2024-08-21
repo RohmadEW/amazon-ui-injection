@@ -68,10 +68,17 @@ export const ProductDetailMain = () => {
         nodes.push(xpathResult.snapshotItem(i))
       }
 
-      const description = nodes
-        .map((node) => node.textContent?.trim())
-        .filter((text) => text)
-        .join(" ")
+      const tempDoc = document.implementation.createHTMLDocument("temp")
+
+      const cleanTextArray = nodes.map((node) => {
+        const html = node.outerHTML
+        tempDoc.body.innerHTML = html
+        tempDoc.querySelectorAll("script, style").forEach((el) => el.remove())
+
+        return tempDoc.body.textContent?.trim() || ""
+      })
+
+      const description = cleanTextArray.filter((text) => text).join(" ")
 
       setProduct((prevProduct) => ({
         ...prevProduct,
