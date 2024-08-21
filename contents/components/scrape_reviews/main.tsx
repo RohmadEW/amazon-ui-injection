@@ -1,12 +1,13 @@
-import { useAtomValue } from "jotai"
+import { useAtom, useAtomValue } from "jotai"
 import { useEffect, useState } from "react"
 
 import { productAtom } from "~store/products"
-import type { Product } from "~types/products"
+import type { ProductReview } from "~types/products"
 
 export const ScrapeReviewsMain = () => {
-  const product = useAtomValue(productAtom)
-  const [totalReviews, setTotalReviews] = useState([])
+  const [product, setProduct] = useAtom(productAtom)
+
+  const [totalReviews, setTotalReviews] = useState<ProductReview[]>([])
   const [loading, setLoading] = useState(false)
   const [reviewsCount, setReviewsCount] = useState(0)
   const [page, setPage] = useState(1)
@@ -38,6 +39,10 @@ export const ScrapeReviewsMain = () => {
         )
 
         setReviewsCount(count)
+        setProduct((prevProduct) => ({
+          ...prevProduct,
+          review_count: count
+        }))
         setLoading(false)
       } catch (err) {
         setError(err.message)
@@ -96,39 +101,78 @@ export const ScrapeReviewsMain = () => {
           )
 
           const reviewData = reviews.map((review) => {
-            const rating = (review.querySelector(".a-icon-alt") as HTMLElement)
-              ?.innerText
-            const title = (review.querySelector(".review-title") as HTMLElement)
-              ?.innerText
-            const date = (review.querySelector(".review-date") as HTMLElement)
-              ?.innerText
-            const customer_review = (
-              review.querySelector(".review-text") as HTMLElement
-            )?.innerText
+            const currentProductReview: ProductReview = {}
+
+            const name = review.querySelector(".a-profile-name") as HTMLElement
+            if (name) {
+              currentProductReview.customer_name = name.innerText.trim()
+            }
+
+            const rating = review.querySelector(".a-icon-alt") as HTMLElement
+            if (rating) {
+              currentProductReview.rating = parseFloat(
+                rating.innerText.trim().split(" ")[0]
+              )
+            }
+
+            const title = review.querySelector(".review-title") as HTMLElement
+            if (title) {
+              const titleSpan = title.innerText.trim().split("out of 5 stars")
+              if (titleSpan.length > 1) {
+                currentProductReview.title = titleSpan[1]
+              }
+            }
+
+            const date = review.querySelector(".review-date") as HTMLElement
+            if (date) {
+              currentProductReview.reviewed_at = date.innerText
+                .trim()
+                .split("on ")[1]
+            }
+
+            const customer_review = review.querySelector(
+              ".review-text"
+            ) as HTMLElement
+            if (customer_review) {
+              currentProductReview.description =
+                customer_review.innerText.trim()
+            }
+
             const verified = review.querySelector(".a-declarative")
               ? true
               : false
-            const name = (
-              review.querySelector(".a-profile-name") as HTMLElement
-            )?.innerText
+            currentProductReview.verified = verified
 
-            return {
-              rating: rating?.trim(),
-              title_review: title?.trim(),
-              date: date?.trim(),
-              customer_review: customer_review
-                ?.trim()
-                .startsWith("The media could not be loaded.")
-                ? "No Media"
-                : customer_review?.trim(),
-              verified: verified,
-              customer_name: name?.trim()
+            const helpCountText = review.querySelector(
+              "span.cr-vote-text"
+            ) as HTMLElement
+            if (helpCountText) {
+              const helpCount = parseInt(
+                helpCountText.innerText.trim().split(" ")[0]
+              )
+              if (helpCount) {
+                currentProductReview.help_count = helpCount
+              }
             }
+
+            const images = review.querySelectorAll(
+              "img.review-image-tile"
+            ) as NodeListOf<HTMLImageElement>
+            if (images) {
+              const imageLinks = Array.from(images).map((img) => img.src)
+              currentProductReview.attached_urls = imageLinks
+            }
+
+            return currentProductReview
           })
 
           setTotalReviews((prevReviews) => [...prevReviews, ...reviewData])
-          sendReviewToServer(reviewData)
         }
+
+        setProduct((prevProduct) => ({
+          ...prevProduct,
+          reviews: totalReviews
+        }))
 
         setLoading(false)
       } catch (err) {
@@ -162,13 +206,43 @@ export const ScrapeReviewsMain = () => {
           {totalReviews.map((review, index) => (
             <div key={index} className="card shadow-md bg-base-100">
               <div className="card-body">
-                <h2 className="card-title">{review.title_review}</h2>
-                <p>{review.customer_review}</p>
-                <p className="text-sm text-gray-500">
-                  <em>{review.date}</em> by {review.customer_name} -{" "}
-                  {review.rating} -{" "}
-                  {review.verified ? "Verified Purchase" : "Unverified"}
-                </p>
+                <div className="flex items-center gap-4 mb-4">
+                  <h2 className="text-lg font-bold">{review.title}</h2>
+                </div>
+                <span className="text-sm text-gray-500">
+                  {review.reviewed_at}
+                </span>
+                <div className="flex items-center gap-4 mb-4">
+                  <span className="text-sm text-gray-500 mr-auto">
+                    {review.customer_name}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    {review.verified ? "Verified" : "Not Verified"}
+                  </span>
+                </div>
+                <div className="mb-4">
+                  <span className="text-sm text-gray-500">
+                    Rating: {review.rating}
+                  </span>
+                </div>
+                <div className="mb-4">
+                  <p>{review.description}</p>
+                </div>
+                <div className="mb-4">
+                  {review.attached_urls?.map((url, index) => (
+                    <img
+                      key={index}
+                      src={url}
+                      alt={review.title}
+                      className="w-24 h-24 object-cover"
+                    />
+                  ))}
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="text-sm text-gray-500">
+                    Helpful: {review.help_count}
+                  </span>
+                </div>
               </div>
             </div>
           ))}

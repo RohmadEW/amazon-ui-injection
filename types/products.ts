@@ -22,12 +22,12 @@ export interface ProductStar {
 }
 
 export interface ProductReview {
-  customer_name?: number
+  customer_name?: string
   rating?: number
   reviewed_at?: string
   title?: string
   description?: string
   verified?: boolean
-  help_count?: boolean
+  help_count?: number
   attached_urls?: Array<string>
 }
