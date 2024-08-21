@@ -53,36 +53,28 @@ export const ScrapeReviewsMain = () => {
     fetchReviewsCount()
   }, [product.asin])
 
-  useEffect(() => {
-    const sendReviewToServer = async (reviewData) => {
-      try {
-        const res = await fetch(
-          "http://127.0.0.1:8000/scraping/insert_reviews",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              asin: product.asin,
-              reviews: reviewData
-            })
-          }
-        )
+  const sendToServer = async (productData) => {
+    try {
+      const res = await fetch("http://127.0.0.1:8000/scraping/insert_reviews", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          product: productData
+        })
+      })
 
-        if (res.ok) {
-          const data = await res.json()
-          setMsgFromServer(data.message)
-        }
-
-        // if (!res.ok) {
-        //   throw new Error("Failed to send reviews to server")
-        // }
-      } catch (err) {
-        // setError(err.message)
+      if (res.ok) {
+        const data = await res.json()
+        setMsgFromServer(data.message)
       }
+    } catch (err) {
+      setMsgFromServer(error.message)
     }
+  }
 
+  useEffect(() => {
     const fetchReviews = async () => {
       try {
         setLoading(true)
@@ -171,6 +163,7 @@ export const ScrapeReviewsMain = () => {
 
         setProduct((prevProduct) => ({
           ...prevProduct,
+          scraped_finished: true,
           reviews: totalReviews
         }))
 
@@ -185,6 +178,12 @@ export const ScrapeReviewsMain = () => {
       fetchReviews()
     }
   }, [product.asin, reviewsCount])
+
+  useEffect(() => {
+    if (product.scraped_finished) {
+      sendToServer(product)
+    }
+  }, [product.scraped_finished])
 
   if (error) {
     return <div>Error: {error}</div>

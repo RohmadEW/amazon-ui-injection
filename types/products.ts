@@ -11,6 +11,7 @@ export interface Product {
   review_count?: number
   stars?: ProductStar
   reviews?: ProductReview[]
+  scraped_finished?: boolean
 }
 
 export interface ProductStar {
