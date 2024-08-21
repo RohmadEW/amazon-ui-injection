@@ -6,11 +6,7 @@ import { ReviewAnalysisPros } from "./pros"
 import { ReviewAnalysisPurchaseMotivations } from "./purchase_motivations"
 import { ReviewAnalysisUsageScenario } from "./useage_scenario"
 
-interface ReviewAnalysisMainProps {
-  asin: string
-}
-
-export const ReviewAnalysisMain = ({ asin }: ReviewAnalysisMainProps) => {
+export const ReviewAnalysisMain = () => {
   return (
     <div className="p-4">
       <div>

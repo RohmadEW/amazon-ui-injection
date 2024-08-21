@@ -1,10 +1,12 @@
 import cssText from "data-text:~style.css"
+import { useAtom, useAtomValue } from "jotai"
 import type { PlasmoCSConfig, PlasmoGetInlineAnchor } from "plasmo"
 import { useState } from "react"
 
+import { productAtom } from "~store/products"
 import type { Product } from "~types/products"
 
-import { Asin } from "./components/asin"
+import { ProductDetailMain } from "./components/product_detail"
 import { ReviewAnalysisMain } from "./components/review_analysis/main"
 import { ReviewCount } from "./components/review_count"
 import { ScrapeReviewsMain } from "./components/scrape_reviews/main"
@@ -27,7 +29,7 @@ export const getInlineAnchor: PlasmoGetInlineAnchor = async () => ({
 export const getShadowHostId = () => "amazon-plasmo-id"
 
 const PlasmoAmazon = () => {
-  const [product, setProduct] = useState<Product>({})
+  const product = useAtomValue(productAtom)
 
   const [showReviewAnalysis, setShowReviewAnalysis] = useState(false)
 
@@ -45,7 +47,7 @@ const PlasmoAmazon = () => {
             </div>
           </div>
           <div className="p-4 w-4/12">
-            <Asin product={product} onChange={setProduct} />
+            <div className="font-bold mb-2">{product.asin}</div>
             <div>#2 In Cell Phone & Accessories</div>
             <div>
               #1 in{" "}
@@ -85,8 +87,9 @@ const PlasmoAmazon = () => {
           </div>
         </div>
       </div>
-      {showReviewAnalysis && <ReviewAnalysisMain asin={product.asin} />}
-      {product.asin && <ScrapeReviewsMain product={product} />}
+      {showReviewAnalysis && <ReviewAnalysisMain />}
+      <ProductDetailMain />
+      {product.asin && <ScrapeReviewsMain />}
     </div>
   )
 }

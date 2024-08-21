@@ -1,13 +1,11 @@
+import { useAtomValue } from "jotai"
 import { useEffect, useState } from "react"
 
+import { productAtom } from "~store/products"
 import type { Product } from "~types/products"
 
-interface ScrapeReviewsMainProps {
-  product: Product
-}
-
-export const ScrapeReviewsMain = ({ product }: ScrapeReviewsMainProps) => {
-  const asin = product.asin
+export const ScrapeReviewsMain = () => {
+  const product = useAtomValue(productAtom)
   const [totalReviews, setTotalReviews] = useState([])
   const [loading, setLoading] = useState(false)
   const [reviewsCount, setReviewsCount] = useState(0)
@@ -19,7 +17,7 @@ export const ScrapeReviewsMain = ({ product }: ScrapeReviewsMainProps) => {
     const fetchReviewsCount = async () => {
       try {
         setLoading(true)
-        const url = `https://www.amazon.com/product-reviews/${asin}/ref=cm_cr_getr_d_paging_btm_next_3?ie=UTF8&reviewerType=all_reviews&sortBy=recent&pageNumber${page}&pageNumber=${page}`
+        const url = `https://www.amazon.com/product-reviews/${product.asin}/ref=cm_cr_getr_d_paging_btm_next_3?ie=UTF8&reviewerType=all_reviews&sortBy=recent&pageNumber${page}&pageNumber=${page}`
         const res = await fetch(url)
         const html = await res.text()
 
@@ -48,7 +46,7 @@ export const ScrapeReviewsMain = ({ product }: ScrapeReviewsMainProps) => {
     }
 
     fetchReviewsCount()
-  }, [asin])
+  }, [product.asin])
 
   useEffect(() => {
     const sendReviewToServer = async (reviewData) => {
@@ -61,7 +59,7 @@ export const ScrapeReviewsMain = ({ product }: ScrapeReviewsMainProps) => {
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
-              asin: asin,
+              asin: product.asin,
               reviews: reviewData
             })
           }
@@ -86,7 +84,7 @@ export const ScrapeReviewsMain = ({ product }: ScrapeReviewsMainProps) => {
         const totalPages = Math.ceil(reviewsCount / 10)
 
         for (let currentPage = 1; currentPage <= totalPages; currentPage++) {
-          const url = `https://www.amazon.com/product-reviews/${asin}/ref=cm_cr_getr_d_paging_btm_next_3?ie=UTF8&reviewerType=all_reviews&sortBy=recent&pageNumber${currentPage}&pageNumber=${currentPage}`
+          const url = `https://www.amazon.com/product-reviews/${product.asin}/ref=cm_cr_getr_d_paging_btm_next_3?ie=UTF8&reviewerType=all_reviews&sortBy=recent&pageNumber${currentPage}&pageNumber=${currentPage}`
           const res = await fetch(url)
           const html = await res.text()
 
@@ -142,14 +140,14 @@ export const ScrapeReviewsMain = ({ product }: ScrapeReviewsMainProps) => {
     if (reviewsCount > 0) {
       fetchReviews()
     }
-  }, [asin, reviewsCount])
+  }, [product.asin, reviewsCount])
 
   if (error) {
     return <div>Error: {error}</div>
   }
 
   return (
-    <div>
+    <div className="p-4">
       <div className="flex items-center gap-4 mb-4 mt-8">
         {loading && <div className="loading loading-spinner"></div>}
         <h1 className="text-2xl font-bold">
